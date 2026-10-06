@@ -9,11 +9,22 @@ public class LevelManager : MonoBehaviour
     public List<Level> levelPrefabs;
     public int currentLevelNo;
     private Level _currentLevel;
+
+    public float GetCurrentLevelTime()
+    {
+        return _currentLevel.levelTime;
+    }
+
     public void RestartLevelManager()
     {
         DeleteCurrentLevel();
         CreateNewLevel();
 
+    }
+
+    public void StopLevel()
+    {
+        _currentLevel.StopLevel();
     }
 
     private void CreateNewLevel()
@@ -23,7 +34,7 @@ public class LevelManager : MonoBehaviour
         _currentLevel.StartLevel(this);
     }
 
-    private void DeleteCurrentLevel()
+    public void DeleteCurrentLevel()
     {
         if (_currentLevel)
         {

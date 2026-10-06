@@ -10,7 +10,9 @@ public class CameraHolder : MonoBehaviour
 
     private void FixedUpdate()
     {
-        var followPos = Vector3.SmoothDamp(transform.position, followObject.position + followObject.forward * rotationOffset, ref _vel, smoothTime);
+        var targetPos = followObject.position + followObject.forward * rotationOffset;
+        targetPos.y= 0;
+        var followPos = Vector3.SmoothDamp(transform.position, targetPos, ref _vel, smoothTime);
         transform.position = followPos;
     }
 }

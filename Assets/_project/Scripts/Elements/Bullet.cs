@@ -28,13 +28,15 @@ public class Bullet : MonoBehaviour
     {
         if (other.CompareTag("Wall"))
         {
+            _weapon.gameDirector.fxManager.PlayImpactPS(transform.position, transform.forward);
             Destroy(gameObject);
         }
         if (other.CompareTag("Enemy"))
         {
             {
-                Destroy(gameObject);
+                _weapon.gameDirector.fxManager.PlayZombieImpactPS(transform.position, transform.forward);
                 other.GetComponent<Enemy>().TakeDamage(1);
+                Destroy(gameObject);
             }
         }
     }

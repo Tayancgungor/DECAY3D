@@ -1,11 +1,16 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Weapon : MonoBehaviour
 {
+    public GameDirector gameDirector;
+
     public WeaponType weaponType;
     public Bullet bulletPrefab;
     public Transform shootPosition;
+    public ParticleSystem muzzlePS;
+    public Light muzzleLight;
 
     public float attackRate;
 
@@ -15,7 +20,7 @@ public class Weapon : MonoBehaviour
     {
         _timeSinceLastShoot += Time.deltaTime;
 
-        if (Mouse.current.leftButton.isPressed && _timeSinceLastShoot > attackRate)
+        if (gameDirector.gameState == GameState.Gameplay && Mouse.current.leftButton.isPressed && _timeSinceLastShoot > attackRate)
         {
             Shoot();
         }
@@ -27,6 +32,9 @@ public class Weapon : MonoBehaviour
         newBullet.transform.LookAt(shootPosition.position + shootPosition.forward);
         newBullet.StartBullet(this);
         _timeSinceLastShoot = 0;
+        muzzlePS.Play();
+        muzzleLight.DOIntensity(15, .05f).SetLoops(2, LoopType.Yoyo);
+        gameDirector.audioManager.PlayShootAS();
     }
 }
 
