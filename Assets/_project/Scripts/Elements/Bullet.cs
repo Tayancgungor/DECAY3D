@@ -34,8 +34,14 @@ public class Bullet : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             {
+                var damage = 1;
                 _weapon.gameDirector.fxManager.PlayZombieImpactPS(transform.position, transform.forward);
-                other.GetComponent<Enemy>().TakeDamage(1);
+                var angle = Vector3.Angle(transform.forward, other.transform.forward);
+                if (angle < 90)
+                {
+                    damage *= 2;
+                }
+                other.GetComponent<Enemy>().TakeDamage(damage);
                 Destroy(gameObject);
             }
         }

@@ -11,25 +11,75 @@ public class Player : MonoBehaviour
     public HealthBar healthBar;
     private PlayerMovement _playerMovement;
     public bool isDead;
-
     public GameObject shadow;
+    public ParticleSystem collectedPS;
+    public Weapon shotgun;
+    public Weapon machineGun;
+    private WeaponType _currentWeaponType;
 
     private void Awake()
     {
         _playerMovement = GetComponent<PlayerMovement>();
     }
-    private void Update()
+    public void Update()
     {
         if (transform.position.y < -10f && gameDirector.gameState == GameState.Gameplay)
         {
             gameDirector.LevelFailed();
         }
+        if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        {
+            SwitchToMachineGun();
+        }
+
+        if (Keyboard.current.digit2Key.wasPressedThisFrame)
+        {
+            SwitchToShotgun();
+        }
+
     }
+
+    public void SwitchToMachineGun()
+    {
+        if (_currentWeaponType != WeaponType.MachineGun)
+        {
+            machineGun.gameObject.SetActive(true);
+            shotgun.gameObject.SetActive(false);
+            _playerMovement.ChangeAnimationState("ChangeWeapon");
+            _currentWeaponType = WeaponType.MachineGun;
+            _playerMovement._isSwitchingWeapon = true;
+            _playerMovement.SetUpperBodyLayerWeightTo1();
+            Invoke(nameof(SetSwitchingWeaponFalse), 0.5f);
+        }
+
+
+    }
+
+    public void SwitchToShotgun()
+    {
+        if (_currentWeaponType != WeaponType.Shotgun)
+        {
+            shotgun.gameObject.SetActive(true);
+            machineGun.gameObject.SetActive(false);
+            _playerMovement.ChangeAnimationState("ChangeWeapon");
+            _currentWeaponType = WeaponType.Shotgun;
+            _playerMovement._isSwitchingWeapon = true;
+            _playerMovement.SetUpperBodyLayerWeightTo1();
+            Invoke(nameof(SetSwitchingWeaponFalse), 0.5f);
+        }
+    }
+
+    void SetSwitchingWeaponFalse()
+    {
+        _playerMovement._isSwitchingWeapon = false;
+        _playerMovement.SetUpperBodyLayerWeightTo0();
+    }
+
     public void RestartPlayer()
     {
         transform.position = Vector3.zero;
         _currentHealth = startHealth;
-        healthBar.SetHealthBar(1);
+        healthBar.SetFillBar(1);
         _playerMovement.RestartPlayerMovement();
         isDead = false;
         EnableShadow();
@@ -54,7 +104,9 @@ public class Player : MonoBehaviour
             return;
         }
         _currentHealth -= damage;
-        healthBar.SetHealthBar((float)_currentHealth / startHealth);
+        healthBar.SetFillBar((float)_currentHealth / startHealth);
+        gameDirector.uIManager.getHitUI.ShowGetHitGradient();
+        gameDirector.audioManager.PlayHitAS();
         if (_currentHealth <= 0)
         {
             Die();
@@ -82,4 +134,17 @@ public class Player : MonoBehaviour
     {
         _playerMovement.PlayAlternativeFailAnimation();
     }
+
+    public void CollectableCollected()
+    {
+        collectedPS.Play();
+        gameDirector.timerManager.CollectableCollected();
+        gameDirector.audioManager.PlayCollectedAS();
+    }
+
+    public Vector3 GetCurrentDirection()
+    {
+        return _playerMovement.GetCurrentDirection();
+    }
+
 }

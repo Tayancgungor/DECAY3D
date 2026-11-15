@@ -46,6 +46,7 @@ public class TimerUI : MonoBehaviour
 
             if (Mathf.Round(remainingTime) < 6) 
             {
+                timerManager.gameDirector.uIManager.getHitUI.ShowGetHitGradient();
                 urgentTMP.transform.localScale = Vector3.one;
                 urgentTMP.transform.DOScale(Vector3.one * 1.5f, 0.2f).SetEase(Ease.OutBack).OnComplete(() =>
                 {

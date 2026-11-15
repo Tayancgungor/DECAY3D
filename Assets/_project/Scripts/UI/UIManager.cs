@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,6 +12,10 @@ public class UIManager : MonoBehaviour
     public FailUI failUI;
     public EscapeMenu escapeMenu;
     public TimerUI timerUI;
+    public GetHitUI getHitUI;
+    public MessageUI messageUI;
+    public InventoryUI inventoryUI;
+    public GrenadeUI grenadeUI;
 
     private void Update()
     {
@@ -45,10 +50,18 @@ public class UIManager : MonoBehaviour
     public void ShowInGameUI() 
     {
         timerUI.Show();
+        getHitUI.Show();
+        messageUI.Show();
+        inventoryUI.Show();
+        grenadeUI.Show();
     }
     public void HideInGameUI()
     {
         timerUI.Hide();
+        getHitUI.Hide();
+        messageUI.Hide();
+        inventoryUI.Hide();
+        grenadeUI.Hide();
     }
 
     // Button Callbacks
@@ -57,6 +70,10 @@ public class UIManager : MonoBehaviour
     {
         Time.timeScale = 1;
         escapeMenu.Hide();
+        Invoke(nameof(ChangeGameStateToGameplay), 0.1f);
+    }
+    void ChangeGameStateToGameplay()
+    {
         gameDirector.gameState = GameState.Gameplay;
     }
     public void MainMenuButtonPressed()
@@ -85,4 +102,5 @@ public class UIManager : MonoBehaviour
         failUI.Hide();
         gameDirector.RestartLevel();
     }
+
 }

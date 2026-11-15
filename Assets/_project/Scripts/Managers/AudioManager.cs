@@ -1,9 +1,12 @@
+using NUnit.Framework;
 using System.Security.Cryptography.X509Certificates;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
     public AudioSource shootAS;
+    public AudioSource shotgunShootAS;
     public AudioSource zombieImpactAS;
     public AudioSource ambient1AS;
     public AudioSource ambient2AS;
@@ -13,14 +16,35 @@ public class AudioManager : MonoBehaviour
     public AudioSource fail2AS;
     public AudioSource zombieScreamAS;
     public AudioSource timeTickAS;
+    public AudioSource collectedAS;
+    public AudioSource explosionAS;
+    public List<AudioSource> dashASs;
 
+
+    public void PlayDashAS() 
+    {
+        dashASs[Random.Range(0, dashASs.Count)].Play();
+    }
+    public void PlayCollectedAS()
+    {
+        collectedAS.Play();
+    }
 
     public void PlayShootAS()
     {
         shootAS.Play();
     }
 
-    public void PlayZombieImpactAS()
+    public void PlayExplosionAS()
+    {
+        explosionAS.Play();
+    }
+
+    public void PlayShotgunShootAS()
+    {
+        shotgunShootAS.Play();
+    }
+    public void PlayHitAS()
     {
         zombieImpactAS.Play();
     }

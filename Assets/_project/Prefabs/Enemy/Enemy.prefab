@@ -574,7 +574,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3
-  m_Acceleration: 8
+  m_Acceleration: 100
   avoidancePriority: 50
   m_AngularSpeed: 2000
   m_StoppingDistance: 0
@@ -599,7 +599,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   healthBar: {fileID: 3585604254595628764}
   startHealth: 10
-  speed: 3
   playerWalkTowardsDistance: 20
   playerAttackDistance: 2
   playerSeeLayerMask:
@@ -610,6 +609,8 @@ MonoBehaviour:
   chestBone: {fileID: 5406430551928482459}
   actionState: 0
   currentAnimationState: 0
+  enemyType: 0
+  collectablePrefab: {fileID: 1617399152847642421, guid: f9009b020b8785d4c946f0369472f23e, type: 3}
 --- !u!114 &-6199930854677890503
 MonoBehaviour:
   m_ObjectHideFlags: 0

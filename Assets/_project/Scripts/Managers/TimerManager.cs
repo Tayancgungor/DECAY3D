@@ -15,6 +15,11 @@ public class TimerManager : MonoBehaviour
         _totalLevelTime = levelTime;
     }
 
+    internal void CollectableCollected()
+    {
+        _levelTime += 1f; // Example: Add 1 second to the timer when a collectable is collected
+    }
+
     private void Update()
     {
         if (gameDirector.gameState  != GameState.Gameplay)

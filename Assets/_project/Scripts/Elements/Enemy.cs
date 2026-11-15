@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 //using static FreeZombie_EyesGlow;
 
 public class Enemy : MonoBehaviour
@@ -10,7 +11,6 @@ public class Enemy : MonoBehaviour
     public HealthBar healthBar;
     public int startHealth;
     private int _currenthealth;
-    public float speed;
     public float playerWalkTowardsDistance;
     public float playerAttackDistance;
     private Rigidbody _rb;
@@ -33,6 +33,7 @@ public class Enemy : MonoBehaviour
     public ActionState actionState;
     public AnimationState currentAnimationState;
     private AnimationState _animationStateBeforeTakeDamage;
+    public EnemyType enemyType;
 
     private void Awake()
     {
@@ -46,7 +47,7 @@ public class Enemy : MonoBehaviour
     public void StartEnemy(Player player)
     {
         _currenthealth = startHealth;
-        healthBar.SetHealthBar(1);
+        healthBar.SetFillBar(1);
         _player = player;
     }
 
@@ -63,13 +64,13 @@ public class Enemy : MonoBehaviour
         {
             actionState = ActionState.Attack;
         }
-        else if (GetDistanceFromPlayer() < playerWalkTowardsDistance && !_isAttackInProgress)
+        else if ((GetDistanceFromPlayer() < playerWalkTowardsDistance || _didSeePlayer) && !_isAttackInProgress)
         {
-            if (GetIfEnemySeesPlayer())
+            if (GetIfEnemySeesPlayer() || _didSeePlayer)
             {
                 actionState = ActionState.WalkTowardsPlayer;
             }
-            else if (_playerLastSeenPosition != Vector3.zero)
+            /*else if (_playerLastSeenPosition != Vector3.zero)
             {
                 if ((transform.position- _playerLastSeenPosition).magnitude < 1f)
                 {
@@ -80,7 +81,7 @@ public class Enemy : MonoBehaviour
                     actionState = ActionState.WalkTowardsPlayerLastSeenPosition;
 
                 }
-            }
+            }*/
         }
 
         //Action State Logic
@@ -195,7 +196,7 @@ public class Enemy : MonoBehaviour
         {
             _animator.SetTrigger("GetHit");
             currentAnimationState = AnimationState.GetHit;
-            StartCoroutine(UpperBodyMaskCoroutine(.3f, .5f));
+            StartCoroutine(UpperBodyMaskCoroutine(.4f, .5f));
         }
         else if (desiredAnimationState == AnimationState.Attack && (currentAnimationState != AnimationState.Attack || forcePlayAnimation))
         {
@@ -219,10 +220,10 @@ public class Enemy : MonoBehaviour
     {
         _currenthealth -= damage;
         StartCoroutine(PlayTakeDamageCoroutine());
-        healthBar.SetHealthBar((float)_currenthealth / startHealth);
+        healthBar.SetFillBar((float)_currenthealth / startHealth);
         _player.gameDirector.fxManager.PlayFloatingText(damage, transform.position);
         _hitFlash.PlayHitFlash();
-        _player.gameDirector.audioManager.PlayZombieImpactAS();
+        _player.gameDirector.audioManager.PlayHitAS();
 
         if (actionState == ActionState.Standing)
         {
@@ -262,7 +263,21 @@ public class Enemy : MonoBehaviour
         shadow.SetActive(false);
         mainLight.enabled = false;
         _player.gameDirector.fxManager.PlayZombieDestroyPSDelayed(2.7f , chestBone);
+
         GetComponentInParent<Level>().EnemyDestroyed(this);
+
+        var minCollectableCount = 1;
+        var maxCollectableCount = 4;
+
+        if (enemyType == EnemyType.Rare)
+        {
+            minCollectableCount = 3;
+            maxCollectableCount = 7;
+        }
+        for (int i = 0; i < Random.Range(minCollectableCount, maxCollectableCount); i++)
+        {
+            SpawnCollectable();
+        }
         Destroy(gameObject, 3f);
     }
 
@@ -273,6 +288,13 @@ public class Enemy : MonoBehaviour
         {
             StopCoroutine(_attackCoroutine);
         }
+    }
+    public Collectable collectablePrefab;
+    public void SpawnCollectable() 
+    {
+        var newCollectable = Instantiate(collectablePrefab);
+        newCollectable.transform.position = transform.position + Vector3.up * 2f;
+        newCollectable.GetComponent<Rigidbody>().AddForce(Vector3.up * .5f, ForceMode.Impulse);
     }
 }
 
@@ -292,4 +314,10 @@ public enum AnimationState
     Attack,
     GetHit,
     Death,
+}
+public enum EnemyType
+{
+    Regular,
+    Rare,
+    Ranged,
 }

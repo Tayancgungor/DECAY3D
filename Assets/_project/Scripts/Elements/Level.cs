@@ -21,6 +21,14 @@ public class Level : MonoBehaviour
         }
     }
 
+    public bool IsLevelCleared()
+    {
+        if (_enemies.Count == 0)
+        {
+            return true;
+        }
+        return false;
+    }
     public void StopLevel()
     {
         foreach (var e in _enemies)
@@ -32,5 +40,10 @@ public class Level : MonoBehaviour
     public void EnemyDestroyed(Enemy enemy)
     {
         _enemies.Remove(enemy);
+    }
+
+    internal void ShowClearLevelMessage()
+    {
+        _levelManager.gameDirector.uIManager.messageUI.ShowMessage("Clear all enemies to open the door", 3, 0);
     }
 }
