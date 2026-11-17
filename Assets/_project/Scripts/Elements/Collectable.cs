@@ -11,6 +11,7 @@ public class Collectable : MonoBehaviour
     private Rigidbody _rb;
     public float availableTime;
     private bool _isAvailable;
+    public CollectableType collectableType;
 
     private void Awake()
     {
@@ -58,7 +59,14 @@ public class Collectable : MonoBehaviour
 
     private void Collected()
     {
-        _player.CollectableCollected();
+        _player.CollectableCollected(collectableType);
         Destroy(gameObject);
     }
+}
+
+public enum CollectableType
+{
+    Time,
+    Coin,
+
 }

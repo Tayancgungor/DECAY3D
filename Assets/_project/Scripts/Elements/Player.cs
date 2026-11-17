@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public bool isDead;
     public GameObject shadow;
     public ParticleSystem collectedPS;
+    public ParticleSystem coinCollectedPS;
     public Weapon shotgun;
     public Weapon machineGun;
     private WeaponType _currentWeaponType;
@@ -103,7 +104,9 @@ public class Player : MonoBehaviour
         {
             return;
         }
-        _currentHealth -= damage;
+        var defenceBonus = gameDirector.upgradeManager.defenceUpgradeCount;
+        _currentHealth -= damage - defenceBonus;
+        damage = Mathf.Max(damage, 1);
         healthBar.SetFillBar((float)_currentHealth / startHealth);
         gameDirector.uIManager.getHitUI.ShowGetHitGradient();
         gameDirector.audioManager.PlayHitAS();
@@ -135,11 +138,21 @@ public class Player : MonoBehaviour
         _playerMovement.PlayAlternativeFailAnimation();
     }
 
-    public void CollectableCollected()
+    public void CollectableCollected(CollectableType type)
     {
-        collectedPS.Play();
-        gameDirector.timerManager.CollectableCollected();
-        gameDirector.audioManager.PlayCollectedAS();
+        if (type == CollectableType.Time)
+        {
+            collectedPS.Play();
+            gameDirector.timerManager.CollectableCollected();
+            gameDirector.audioManager.PlayCollectedAS();
+        }
+        else if (type == CollectableType.Coin)
+        {
+            coinCollectedPS.Play();
+            gameDirector.coinManager.CoinCollected(1);
+            gameDirector.audioManager.PlayCollectedAS();
+        }
+
     }
 
     public Vector3 GetCurrentDirection()

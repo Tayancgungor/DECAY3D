@@ -9,14 +9,35 @@ public class GameDirector : MonoBehaviour
     public AudioManager audioManager;
     public UIManager uIManager;
     public TimerManager timerManager;
+    public CoinManager coinManager;
+    public UpgradeManager upgradeManager;
     public Player player;
 
     public GameState gameState;
     private void Start()
     {
+        LoadPersistanceData();
         uIManager.ShowMainMenu();
     }
-    /*private void Update()
+    private void LoadPersistanceData()
+    {
+        var level = PlayerPrefs.GetInt("CurrentLevel");
+        level = Mathf.Max(level, 1);
+        levelManager.SetStartingLevel(level);
+        coinManager.SetStartingCoinCount(PlayerPrefs.GetInt("CurrentCoinCount"));
+        upgradeManager.SetStartingUpgrades(PlayerPrefs.GetInt("AttackUpgrades"), PlayerPrefs.GetInt("DefenceUpgrades"), PlayerPrefs.GetInt("CoinUpgrades"));
+    }
+    void ResetPersistanceData()
+    {
+        PlayerPrefs.SetInt("CurrentLevel", 1);
+        PlayerPrefs.SetInt("CurrentCoinCount", 0);
+        PlayerPrefs.SetInt("AttackUpgrades", 0);
+        PlayerPrefs.SetInt("DefenceUpgrades", 0);
+        PlayerPrefs.SetInt("CoinUpgrades", 0);
+        LoadPersistanceData();
+
+    }
+    private void Update()
     {
         if (Keyboard.current.pKey.wasPressedThisFrame)
         {
@@ -32,7 +53,12 @@ public class GameDirector : MonoBehaviour
         {
             LoadPreviousLevel();
         }
-    }*/
+        if (Keyboard.current.lKey.wasPressedThisFrame)
+        {
+            ResetPersistanceData();
+            RestartLevel();
+        }
+    }
 
     private void LoadPreviousLevel()
     {
@@ -81,6 +107,7 @@ public class GameDirector : MonoBehaviour
         audioManager.PlayVictoryAS();
         uIManager.ShowWinUI(3);
         uIManager.HideInGameUI();
+        PlayerPrefs.SetInt("CurrentLevel", levelManager.currentLevelNo + 1);
     }
 
     public void LevelFailed()

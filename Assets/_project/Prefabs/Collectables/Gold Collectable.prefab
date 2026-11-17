@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1617399152847642421}
   - component: {fileID: 3007088917343967311}
   m_Layer: 0
-  m_Name: Collectable
+  m_Name: Gold Collectable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -100,6 +100,7 @@ MonoBehaviour:
   speed: 15
   collisionCollider: {fileID: 1729922719522047391}
   availableTime: 1
+  collectableType: 1
 --- !u!135 &3007088917343967311
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -269,15 +270,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6925740845400196571, guid: 8f64c1c892dcfc84a83cb80125c936ed, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
-      value: 0.7735849
+      value: 0.12001601
       objectReference: {fileID: 0}
     - target: {fileID: 6925740845400196571, guid: 8f64c1c892dcfc84a83cb80125c936ed, type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.5493525
+      value: 0.6142707
       objectReference: {fileID: 0}
     - target: {fileID: 6925740845400196571, guid: 8f64c1c892dcfc84a83cb80125c936ed, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
-      value: 0.22258809
+      value: 0.8207547
       objectReference: {fileID: 0}
     - target: {fileID: 8258704667620824756, guid: 8f64c1c892dcfc84a83cb80125c936ed, type: 3}
       propertyPath: m_Name

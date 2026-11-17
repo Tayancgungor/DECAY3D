@@ -16,14 +16,9 @@ public class UIManager : MonoBehaviour
     public MessageUI messageUI;
     public InventoryUI inventoryUI;
     public GrenadeUI grenadeUI;
+    public CoinUI coinUI;
 
-    private void Update()
-    {
-        if (Keyboard.current.escapeKey.isPressed)
-        {
-            ShowEscapeMenu();
-        }
-    }
+
     public void ShowMainMenu()
     {
         gameDirector.gameState = GameState.MainMenu;
@@ -31,7 +26,15 @@ public class UIManager : MonoBehaviour
         winUI.Hide();
         failUI.Hide();
         escapeMenu.Hide();
+        coinUI.Hide();
         HideInGameUI();
+    }
+    private void Update()
+    {
+        if (Keyboard.current.escapeKey.isPressed)
+        {
+            ShowEscapeMenu();
+        }
     }
     public void ShowEscapeMenu()
     {
@@ -54,6 +57,7 @@ public class UIManager : MonoBehaviour
         messageUI.Show();
         inventoryUI.Show();
         grenadeUI.Show();
+        coinUI.Show();
     }
     public void HideInGameUI()
     {
@@ -62,6 +66,7 @@ public class UIManager : MonoBehaviour
         messageUI.Hide();
         inventoryUI.Hide();
         grenadeUI.Hide();
+        coinUI.Hide();
     }
 
     // Button Callbacks

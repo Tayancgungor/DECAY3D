@@ -610,7 +610,8 @@ MonoBehaviour:
   actionState: 0
   currentAnimationState: 0
   enemyType: 0
-  collectablePrefab: {fileID: 1617399152847642421, guid: f9009b020b8785d4c946f0369472f23e, type: 3}
+  timerCollectablePrefab: {fileID: 1617399152847642421, guid: f9009b020b8785d4c946f0369472f23e, type: 3}
+  coinCollectablePrefab: {fileID: 1617399152847642421, guid: d4f2cd7ebb56b7d4eacbdff3dd2a01e7, type: 3}
 --- !u!114 &-6199930854677890503
 MonoBehaviour:
   m_ObjectHideFlags: 0

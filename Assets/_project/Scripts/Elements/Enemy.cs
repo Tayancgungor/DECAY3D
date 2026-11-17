@@ -127,7 +127,12 @@ public class Enemy : MonoBehaviour
 
         if (GetDistanceFromPlayer() < playerAttackDistance)
         {
-            _player.TakeDamage(1);
+            var damage = 1;
+            if (enemyType == EnemyType.Rare)
+            {
+                damage = 3;
+            }
+            _player.TakeDamage(damage);
         }
         _isAttackInProgress = false;
     }
@@ -274,6 +279,12 @@ public class Enemy : MonoBehaviour
             minCollectableCount = 3;
             maxCollectableCount = 7;
         }
+
+        var coinUpgradeCount = _player.gameDirector.upgradeManager.coinUpgradeCount;
+
+        minCollectableCount += coinUpgradeCount;
+        maxCollectableCount += coinUpgradeCount;
+
         for (int i = 0; i < Random.Range(minCollectableCount, maxCollectableCount); i++)
         {
             SpawnCollectable();
@@ -289,10 +300,18 @@ public class Enemy : MonoBehaviour
             StopCoroutine(_attackCoroutine);
         }
     }
-    public Collectable collectablePrefab;
+
+
+    public Collectable timerCollectablePrefab;
+    public Collectable coinCollectablePrefab;
     public void SpawnCollectable() 
     {
-        var newCollectable = Instantiate(collectablePrefab);
+        Collectable prefab = timerCollectablePrefab;
+        if (Random.value <.5f)
+        {
+            prefab = coinCollectablePrefab;
+        }
+        var newCollectable = Instantiate(prefab);
         newCollectable.transform.position = transform.position + Vector3.up * 2f;
         newCollectable.GetComponent<Rigidbody>().AddForce(Vector3.up * .5f, ForceMode.Impulse);
     }
