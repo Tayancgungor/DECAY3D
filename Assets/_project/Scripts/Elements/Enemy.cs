@@ -280,10 +280,10 @@ public class Enemy : MonoBehaviour
             maxCollectableCount = 7;
         }
 
-        var coinUpgradeCount = _player.gameDirector.upgradeManager.coinUpgradeCount;
+        var lootUpgradeCount = _player.gameDirector.upgradeManager.lootUpgradeCount;
 
-        minCollectableCount += coinUpgradeCount;
-        maxCollectableCount += coinUpgradeCount;
+        minCollectableCount += lootUpgradeCount;
+        maxCollectableCount += lootUpgradeCount;
 
         for (int i = 0; i < Random.Range(minCollectableCount, maxCollectableCount); i++)
         {

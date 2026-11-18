@@ -21,9 +21,9 @@ public class GameDirector : MonoBehaviour
     }
     private void LoadPersistanceData()
     {
-        var level = PlayerPrefs.GetInt("CurrentLevel");
-        level = Mathf.Max(level, 1);
-        levelManager.SetStartingLevel(level);
+        var levelNo = PlayerPrefs.GetInt("CurrentLevel");
+        levelNo = Mathf.Clamp(levelNo, 1, levelManager.levelPrefabs.Count);
+        levelManager.SetStartingLevel(levelNo);
         coinManager.SetStartingCoinCount(PlayerPrefs.GetInt("CurrentCoinCount"));
         upgradeManager.SetStartingUpgrades(PlayerPrefs.GetInt("AttackUpgrades"), PlayerPrefs.GetInt("DefenceUpgrades"), PlayerPrefs.GetInt("CoinUpgrades"));
     }

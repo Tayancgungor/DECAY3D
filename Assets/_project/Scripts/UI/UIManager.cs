@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     public InventoryUI inventoryUI;
     public GrenadeUI grenadeUI;
     public CoinUI coinUI;
+    public UpgradeUI upgradeUI;
 
 
     public void ShowMainMenu()
@@ -26,7 +27,8 @@ public class UIManager : MonoBehaviour
         winUI.Hide();
         failUI.Hide();
         escapeMenu.Hide();
-        coinUI.Hide();
+        coinUI.Show();
+        upgradeUI.Hide();
         HideInGameUI();
     }
     private void Update()
@@ -57,7 +59,6 @@ public class UIManager : MonoBehaviour
         messageUI.Show();
         inventoryUI.Show();
         grenadeUI.Show();
-        coinUI.Show();
     }
     public void HideInGameUI()
     {
@@ -66,7 +67,6 @@ public class UIManager : MonoBehaviour
         messageUI.Hide();
         inventoryUI.Hide();
         grenadeUI.Hide();
-        coinUI.Hide();
     }
 
     // Button Callbacks
@@ -88,6 +88,10 @@ public class UIManager : MonoBehaviour
         gameDirector.gameState = GameState.MainMenu;
         ShowMainMenu();
     }
+    public void UpgradeButtonPressed()
+    {
+        upgradeUI.Show();
+    }
     public void StartGameButtonPressed()
     {
         mainMenu.Hide();
@@ -101,11 +105,14 @@ public class UIManager : MonoBehaviour
     {
         winUI.Hide();
         gameDirector.LoadNextLevel();
+        upgradeUI.Hide();
+
     }
     public void RetryButtonPressed()
     {
         failUI.Hide();
         gameDirector.RestartLevel();
+        upgradeUI.Hide();
     }
 
 }
